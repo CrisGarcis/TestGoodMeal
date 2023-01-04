@@ -13,8 +13,8 @@ class Controller extends BaseController
      *     @OA\Info(
      *         version="1.0.0",
      * @OA\Contact(
-     *     email="support@example.com",
-     *     name="Support Team"
+     *     email="jhonier491@gmail.com",
+     *     name="CrisGarcis"
      *   ),
      *         title="GoodMeal test",
      *         @OA\License(name="MIT")
