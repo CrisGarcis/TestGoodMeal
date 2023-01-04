@@ -1,14 +1,13 @@
-FROM node:14-alpine AS builder
 
-ENV NODE_VERSION 14.19.1
+FROM node:14-alpine
 
 WORKDIR /app
+
+COPY package*.json ./
 COPY ./ /app
 
-ENV NODE_OPTIONS=--max_old_space_size=8192
-RUN npm install 
-RUN npm run build
+RUN npm install
 
-FROM nginx:1.15
-COPY --from=builder /app/build/ /usr/share/nginx/html
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 8080
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
