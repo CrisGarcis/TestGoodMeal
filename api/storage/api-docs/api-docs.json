@@ -1,0 +1,258 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "GoodMeal test",
+        "contact": {
+            "name": "CrisGarcis",
+            "email": "jhonier491@gmail.com"
+        },
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8200/",
+            "description": "Desarrollo Test"
+        }
+    ],
+    "paths": {
+        "/store/product/{storeId}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Returns list store's products",
+                "description": "Returns a map of products",
+                "operationId": "index",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "ID of pet that needs to be fetched",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "maximum": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "additionalProperties": {
+                                        "type": "integer",
+                                        "format": "int32"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/store/product": {
+            "post": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Create product",
+                "description": "",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Create product object",
+                    "required": true
+                },
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/store/product/{storeID}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "storeId",
+                        "in": "path",
+                        "description": "ID of store that needs to be fetched",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "maximum": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Store not found"
+                    }
+                }
+            }
+        },
+        "/store/product/{product_id}": {
+            "delete": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete product  by ID",
+                "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "ID of the product that needs to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Product not found"
+                    }
+                }
+            }
+        },
+        "/store/store": {
+            "get": {
+                "tags": [
+                    "store"
+                ],
+                "summary": "Returns list stores",
+                "description": "Returns a map of stores",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "additionalProperties": {
+                                        "type": "integer",
+                                        "format": "int32"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "store"
+                ],
+                "summary": "Create store",
+                "description": "",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Create store object",
+                    "required": true
+                },
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/store/store/{storeID}": {
+            "get": {
+                "tags": [
+                    "store"
+                ],
+                "summary": "Returns a specific store by its ID",
+                "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "storeId",
+                        "in": "path",
+                        "description": "ID of store that needs to be fetched",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "maximum": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Store not found"
+                    }
+                }
+            }
+        },
+        "/store/store/{store_id}": {
+            "delete": {
+                "tags": [
+                    "store"
+                ],
+                "summary": "Delete store  by ID",
+                "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "storeId",
+                        "in": "path",
+                        "description": "ID of the store that needs to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Store not found"
+                    }
+                }
+            }
+        }
+    }
+}
