@@ -5,4 +5,6 @@ $router->group([
   "namespace" => "Store",
 ], function () use ($router) {
   resource("store", "Store", $router);
+  documentable("store", "StoreController", $router);
+  placeable("store", "StoreController", $router);
 });
