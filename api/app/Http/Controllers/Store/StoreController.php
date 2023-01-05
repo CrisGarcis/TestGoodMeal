@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Contracts\DocumentableController;
 use App\Http\Controllers\Contracts\DocumentableControllerContract;
-use App\Models\Store\Store;
+use App\Models\Store;
 use Illuminate\Http\Request;
 
 class StoreController extends ResourceController implements DocumentableControllerContract
@@ -46,22 +46,30 @@ class StoreController extends ResourceController implements DocumentableControll
         return parent::index($req, $withQuery);
     }
    
-    /**
+   /**
      * @OA\Post(
      *     path="/store/store",
-     *     tags={"store"},
-     *     summary="Create store",
-     *     description="",
+     *     summary="New Store",
      *     operationId="store",
+     *     tags={"store"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Store object",
+     *         @OA\JsonContent(ref="#/components/schemas/StoreRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="A store",
+     *         @OA\JsonContent(ref="#/components/schemas/StoreResponse"),
+     *     ),
      *     @OA\Response(
      *         response="default",
-     *         description="successful operation"
-     *     ),
-     *     @OA\RequestBody(
-     *         description="Create store object",
-     *         required=true
+     *         description="unexpected error",
+     *         @OA\Schema(ref="#/components/schemas/Error")
      *     )
      * )
+     * @param Request $request
+     * @return array
      */
     public function store(Request $rec)
     {
