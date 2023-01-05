@@ -174,16 +174,32 @@
                 "tags": [
                     "store"
                 ],
-                "summary": "Create store",
-                "description": "",
+                "summary": "New Store",
                 "operationId": "store",
                 "requestBody": {
-                    "description": "Create store object",
-                    "required": true
+                    "description": "Store object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreRequest"
+                            }
+                        }
+                    }
                 },
                 "responses": {
+                    "200": {
+                        "description": "A store",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StoreResponse"
+                                }
+                            }
+                        }
+                    },
                     "default": {
-                        "description": "successful operation"
+                        "description": "unexpected error"
                     }
                 }
             }
@@ -252,6 +268,62 @@
                         "description": "Store not found"
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreRequest": {
+                "title": "StoreRequest",
+                "required": [
+                    "display_name",
+                    "name"
+                ],
+                "properties": {
+                    "display_name": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "string"
+                    },
+                    "longitude": {
+                        "type": "string"
+                    },
+                    "start_time": {
+                        "type": "time"
+                    },
+                    "end_time": {
+                        "type": "time"
+                    },
+                    "address": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreResponse": {
+                "title": "StoreResponse",
+                "description": "Class Store",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "attributes": {
+                        "properties": {
+                            "title": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
             }
         }
     }
