@@ -19,8 +19,8 @@ class CreateStoreTable extends Migration
             $table->string('name', 200);
             $table->string('latitude', 30);
             $table->string('longitude', 30);
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->string('address', 60);
             $table->timestamps();
         });
