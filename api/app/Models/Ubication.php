@@ -11,12 +11,12 @@ class Ubication extends Model
      *
      * @var array
      */
-
-    protected $table = 'ubication';
+ 
+    protected $table = 'ubication_place';
     protected $fillable = [
         'geom',
-        'ubication_type',
-        'ubication_id'
+        'placeable_type',
+        'placeable_id'
     ];
     public function placeable()
     {

@@ -37,6 +37,14 @@ function documentable($prefix, $controller, $router)
         $router->delete("{model_id}/documentDelete/{document_id}", "$controller@documentDelete");
     });
 }
+function placeable($prefix, $controller, $router)
+{
+    $router->group(["prefix" => $prefix], function ($router) use ($controller) {
+        $router->post("{model_id}/placed", "$controller@addUbication");
+        $router->post("{model_id}/deleteAndAddUbication", "$controller@deleteAndAddUbication");
+        $router->delete("{model_id}/ubicationDelete/{ubication_id}", "$controller@ubicationDelete");
+    });
+}
 // API route group
 
 require __DIR__ . "/store.php";

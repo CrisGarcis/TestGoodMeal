@@ -10,24 +10,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-trait PleaceableController
+trait PlaceableController
 {
 
     public function addUbication(string $model_id, Request $request)
     {
 
         $this->validate($request, [
-            'logitude' => 'required',
+            'longitude' => 'required',
             'latitude' => 'required',
 
         ]);
-        $latitude=$request->latitude;
-        $longitude=$request->longitude;
+        $latitude = $request->latitude;
+        $longitude = $request->longitude;
 
         $class_name = $this->model;
-        DB::statement("INSERT INTO ubication (geom,ubication_type,ubication_id) VALUES (
-            ST_GeomFromText('POINT($latitude $longitude)', 26910),'$class_name',$model_id
-          )");
+        Ubication::create([
+            'placeable_type' => $class_name,
+            'placeable_id' => $model_id,
+            'geom' => DB::raw("ST_GeomFromText('POINT($longitude $latitude)', 4326)"),
+        ]);
+     
     }
 
 

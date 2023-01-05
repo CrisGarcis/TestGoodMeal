@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Store;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Contracts\DocumentableController;
 use App\Http\Controllers\Contracts\DocumentableControllerContract;
+use App\Http\Controllers\Contracts\PlaceableControllerContract;
+use App\Http\Controllers\Contracts\PlaceableController;
 use App\Models\Store;
+use App\Models\Ubication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class StoreController extends ResourceController implements DocumentableControllerContract
+class StoreController extends ResourceController implements DocumentableControllerContract, PlaceableControllerContract
 {
     use DocumentableController;
+    use PlaceableController;
 
     protected $model = Store::class;
     /**
@@ -22,7 +27,7 @@ class StoreController extends ResourceController implements DocumentableControll
     public function __construct()
     {
     }
-/**
+    /**
      * @OA\Get(
      *     path="/store/store",
      *     tags={"store"},
@@ -41,12 +46,25 @@ class StoreController extends ResourceController implements DocumentableControll
      *     )
      * )
      */
-    public function index(Request $req, $withQuery = false)
+    public function index(Request $req, $withQuery = true)
     {
-        return parent::index($req, $withQuery);
+        /*  $this->validate($req, [
+            'latitude' => 'required',
+            'longitude' => 'required',
+
+        ]); */
+        $latitude = '5.0636675'; //$req->latitude;
+        $longitude = '-75.4699306'; //$req->latitude;
+        $storesOnRange = Store::selectRaw("store.*,(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0) as km")
+            ->join('ubication_place', 'ubication_place.placeable_id', '=', 'store.id')
+            ->where('ubication_place.placeable_type', $this->model)
+            ->whereRaw("(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0)<=?", [100])
+            ->get();
+
+        return $storesOnRange;
     }
-   
-   /**
+
+    /**
      * @OA\Post(
      *     path="/store/store",
      *     summary="New Store",
@@ -73,7 +91,8 @@ class StoreController extends ResourceController implements DocumentableControll
      */
     public function store(Request $rec)
     {
-        return parent::store($rec);
+        $newStore = parent::store($rec);
+        return  $this->addUbication($newStore->id, $rec);
     }
     /**
      * @OA\Get(
