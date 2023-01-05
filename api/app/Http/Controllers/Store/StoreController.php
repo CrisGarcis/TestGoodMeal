@@ -58,7 +58,8 @@ class StoreController extends ResourceController implements DocumentableControll
         $storesOnRange = Store::selectRaw("store.*,(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0) as km")
             ->join('ubication_place', 'ubication_place.placeable_id', '=', 'store.id')
             ->where('ubication_place.placeable_type', $this->model)
-            ->whereRaw("(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0)<=?", [100])
+            ->whereRaw("(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0)<=?", [300])
+            ->orderBy('km','asc')
             ->get();
 
         return $storesOnRange;
