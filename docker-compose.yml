@@ -1,16 +1,7 @@
 version: "3.1"
 
 services:
-  gui:
-    image: node:14-alpine
-    working_dir: /app
-    command: "npm run dev"
-    volumes:
-      - ./gui:/app
-    ports:
-      - 3000:3000
-    depends_on:
-      - db
+
   api:
     image: api
     build: ./api
