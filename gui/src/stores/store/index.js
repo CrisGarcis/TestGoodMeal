@@ -1,7 +1,7 @@
 import router from "@/router";
 import client from "../../utilitites/axios_client.utilities";
 import { defineStore } from "pinia";
-
+const STATUS_SUCCESS=200;
 export const useStore = defineStore({
   id: "stores",
   state: () => ({
@@ -34,15 +34,16 @@ export const useStore = defineStore({
     async getData() {
       this.isloading = true;
       const res = await client().get("store/store");
-      if (res.data.success) {
+      if (res.status===STATUS_SUCCESS) {
         this.isloading = false;
 
-        this.stores = res.data.stores;
+        this.stores = res.data;
       }
     },
     async deleteData(id) {
       const res = await client().delete("store/store/" + id);
-      if (res.data.success) {
+      console.log(res);
+      if (res.status===STATUS_SUCCESS) {
         alert(res.data.message);
       }
     },
@@ -50,7 +51,7 @@ export const useStore = defineStore({
     async updateData(data) {
       this.isloading = true;
       const res = await client().post("store/store/" + data.id, data);
-      if (res.data.success) {
+      if (res.status===STATUS_SUCCESS) {
         alert(res.data.message);
         this.isloading = false;
         router.push("/");
