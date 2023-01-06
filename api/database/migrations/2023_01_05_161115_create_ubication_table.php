@@ -22,7 +22,10 @@ class CreateUbicationTable extends Migration
         });
 
         //Enable PostGIS (as of 3.0 contains just geometry/geography)
-        //  DB::statement('CREATE EXTENSION postgis'); --dont install if you have postgress-postgis extension
+          DB::statement('CREATE EXTENSION postgis');
+
+          DB::statement('CREATE EXTENSION pgRouting');
+
         //enable raster support (for 3+)
         DB::statement('CREATE EXTENSION postgis_raster');
         //Enable Topology
