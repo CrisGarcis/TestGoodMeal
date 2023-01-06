@@ -1,13 +1,11 @@
 import axios from "axios";
-
-export let createClient = () => {
+export let client = () => {
+let {VITE_API_HOST}=import.meta.env;
+console.log("process.env");
 
   return axios.create({
-    baseURL: process.env.VUE_APP_API_HOST,
-    headers: {
-      
-    }
+    baseURL: VITE_API_HOST
   });
 };
 
-export default createClient;
+export default client;
