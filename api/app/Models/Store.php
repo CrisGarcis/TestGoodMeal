@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  *     schema="StoreRequest",
  *     type="object",
  *     title="StoreRequest",
- *     required={"display_name", "name"},
+ *     required={"display_name", "name","document","latitude","longitude"},
  *     properties={
  *         @OA\Property(property="display_name", type="string"),
  *         @OA\Property(property="name", type="string"),
@@ -26,7 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  *         @OA\Property(property="longitude", type="string"),
  *         @OA\Property(property="start_time", type="time"),
  *         @OA\Property(property="end_time", type="time"),
- *         @OA\Property(property="address", type="string")
+ *         @OA\Property(property="address", type="string"),
+ *         @OA\Property(property="document", type="string", format="binary"),
  * 
  *     }
  * ),
@@ -61,6 +62,7 @@ class Store extends Model
         'address'
     ];
     protected $table = 'store';
+    protected $with=['document'];
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -71,5 +73,14 @@ class Store extends Model
     public function ubication()
     {
         return $this->morphOne(Ubication::class, 'placeable');
+    }
+
+    public function documents()
+    {
+        return $this->morphMany(Document::class, 'documentable');
+    }
+    public function document()
+    {
+        return $this->morphOne(Document::class, 'documentable');
     }
 }

@@ -61,8 +61,6 @@ trait DocumentableController
         ]);
 
         $this->createFile($request);
-        $request->request->add(['company_plant_id' => $request->header('plant')]);
-        $request->request->add(['user_id' => Auth::check() ? Auth::user()->id : null]);
 
         $modelDocument = $this->model::find($model_id)->documents()->create($request->all());
         return $modelDocument;
