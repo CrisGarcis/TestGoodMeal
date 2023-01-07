@@ -7,6 +7,7 @@ use App\Http\Controllers\Contracts\DocumentableController;
 use App\Http\Controllers\Contracts\DocumentableControllerContract;
 use App\Http\Controllers\Contracts\PlaceableControllerContract;
 use App\Http\Controllers\Contracts\PlaceableController;
+use App\Models\Category;
 use App\Models\Store;
 use App\Models\Ubication;
 use Illuminate\Http\Request;
@@ -47,14 +48,14 @@ class StoreController extends ResourceController implements DocumentableControll
      */
     public function index(Request $req, $withQuery = true)
     {
-        /*  $this->validate($req, [
+        $this->validate($req, [
             'latitude' => 'required',
             'longitude' => 'required',
 
-        ]); */
+        ]);
 
-        $latitude = '5.0636675'; //$req->latitude;
-        $longitude = '-75.4699306'; //$req->latitude;
+        $latitude = $req->latitude;
+        $longitude = $req->longitude;
         $storesOnRange = Store::selectRaw("store.*,(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0) as km")
             ->join('ubication_place', 'ubication_place.placeable_id', '=', 'store.id')
             ->where('ubication_place.placeable_type', $this->model)
@@ -103,19 +104,25 @@ class StoreController extends ResourceController implements DocumentableControll
             'document' => 'required',
         ]);
         $newStore = parent::store($rec);
-        $this->addDocument($newStore->id,$rec);
+        $this->addDocument($newStore->id, $rec);
         $this->addUbication($newStore->id, $rec);
+        $this->addCategories($newStore->id, $rec);
+
         return $newStore;
+    }
+    private function addCategories($store_id)
+    {
+        Category::create(['description' => 'General','name' => 'General', 'store_id' => $store_id]);
     }
     /**
      * @OA\Get(
-     *     path="/store/store/{storeID}",
+     *     path="/store/store/{model_id}",
      *     tags={"store"},
      *     summary="Returns a specific store by its ID",
      *     description="For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
      *     operationId="show",
      *     @OA\Parameter(
-     *         name="storeId",
+     *         name="model_id",
      *         in="path",
      *         description="ID of store that needs to be fetched",
      *         required=true,
