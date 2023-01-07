@@ -1,44 +1,34 @@
+<script setup>
+let {VITE_API_HOST}=import.meta.env;
+</script>
 <template>
   <div>
     <v-container class="my-3">
       <div v-if="isloading">Loading.....</div>
-      <div v-else>
-        <table style="width: 100%">
-          <thead>
-            <tr style="width: 100%">
-              <th class="text-left">Id</th>
-              <th class="text-left">Name</th>
-              <th class="text-left">Email</th>
-              <th class="text-left">Country</th>
-              <th class="text-left">Number</th>
-              <th class="text-left">Edit</th>
-              <th class="text-left">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              style="width: 100%"
-              v-for="(store, index) in stores"
-              :key="index"
-            >
-              <td class="text-left pa-3">{{ index + 1 }}</td>
-              <td class="text-left pa-3">{{ store.name }}</td>
-              <td class="text-left pa-3">{{ store.email }}</td>
-              <td class="text-left pa-3">{{ store.country }}</td>
-              <td class="text-left pa-3">{{ store.number }}</td>
-              <td class="text-left pa-3">
-                <router-link :to="`/update/${store.id}`">
-                  <v-btn color="success" text>Edit</v-btn></router-link
-                >
-              </td>
-              <td class="text-left">
-                <v-btn color="error" text @click="deletedata(store.id)"
-                  >Delete</v-btn
-                >
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div v-else class="row justify-content-around">
+        <router-link
+          :to="`/store/show/${store.id}`"
+          v-for="(store, index) in stores"
+          :key="index"
+          class="tarjet-store col-sm-12 col-lg-6"
+        >
+          <div class="tarjet-store__header">
+            <div class="schedule-store">
+              Hoy {{ store.start_time }} - {{ store.end_time }}
+            </div>
+            <div class="tarjet-store__delivery">Retiro o delivery</div>
+            <img
+              class="profile-store"
+              :src="VITE_API_HOST+'documents/' + (store.document && store.document.name)"
+            />
+          </div>
+          <div class="tarjet-footer">
+            <h6>{{ store.display_name }}</h6>
+            <h6>{{ parseFloat(store.km).toFixed(2) }} Km</h6>
+
+          </div>
+         
+        </router-link>
       </div>
     </v-container>
   </div>
@@ -58,10 +48,72 @@ export default {
       this.deleteData(id);
       //   i will take a time to fetch the data
       this.getData();
-    },
+    }
   },
   mounted() {
     this.getData();
   },
 };
 </script>
+<style lang="scss" scoped>
+$color_red: red;
+$color_pink: rgb(225, 47, 241);
+$color_pink_softy: rgb(246, 207, 249);
+
+.tarjet-store {
+  border-radius: 12px;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  margin-left: 7px;
+  margin-right: 7px;
+  max-width: 400px;
+  height: 200px;
+  padding: 0px !important;
+  box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+.tarjet-store__header {
+  position: relative;
+  background-image: url("@/assets/images/store/fruit.jpeg");
+  background-size: 100%;
+  width: 100%;
+  height: 45%;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+}
+.schedule-store {
+  background-color: $color_pink;
+  font-size: 1rem;
+  width: 12rem;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  margin-top: 1rem;
+  margin-left: 1rem;
+
+  position: absolute;
+}
+.tarjet-store__delivery {
+  color: $color_pink;
+  background-color: $color_pink_softy;
+  margin-top: 3rem;
+  margin-left: 1rem;
+  width: 10rem;
+  border-radius: 12px;
+  text-align: center;
+  position: absolute;
+}
+.profile-store {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 100%;
+  position: absolute;
+  right: 2rem;
+  top: 3rem;
+}
+.tarjet-footer {
+  padding: 3px;
+}
+.tarjet-footer h6 {
+  color: black;
+}
+</style>

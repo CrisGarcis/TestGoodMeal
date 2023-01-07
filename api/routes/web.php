@@ -21,7 +21,7 @@ function resource($prefix, $controller, $router)
     $router->group(["prefix" => $prefix], function ($router) use ($controller) {
         $router->get("/", $controller . "Controller@index");
         $router->post("/", $controller . "Controller@store");
-        $router->get("/{id}", $controller . "Controller@show");
+        $router->get("/{model_id}", $controller . "Controller@show");
         $router->put("/{model_id}", $controller . "Controller@update");
         $router->post("/{model_id}", $controller . "Controller@update");
         $router->patch("/{model_id}", $controller . "Controller@update");
@@ -48,3 +48,5 @@ function placeable($prefix, $controller, $router)
 // API route group
 
 require __DIR__ . "/store.php";
+require __DIR__ . "/document.php";
+

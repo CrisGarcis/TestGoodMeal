@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div class="bg-dark">
+  <div class="container">
+  <!--   <div class="bg-dark">
       <v-container class="p-4">
         <h2 class="text-center text-white">Tiendas</h2>
       </v-container>
-    </div>
-    <v-container class="my-3">
+    </div> -->
+   <!--  <v-container class="my-3">
       <v-card>
         <div class="d-flex justify-space-between align-center pa-3">
           <v-card-title>Tiendas(0)</v-card-title>
@@ -14,7 +14,7 @@
           >
         </div>
       </v-card>
-    </v-container>
+    </v-container> -->
     <ListComponentVue />
   </div>
 </template>
