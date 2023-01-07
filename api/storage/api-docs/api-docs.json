@@ -67,16 +67,32 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Create product",
-                "description": "",
-                "operationId": "store",
+                "summary": "New Product",
+                "operationId": "product",
                 "requestBody": {
-                    "description": "Create product object",
-                    "required": true
+                    "description": "Product object",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequest"
+                            }
+                        }
+                    }
                 },
                 "responses": {
+                    "200": {
+                        "description": "A product",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductResponse"
+                                }
+                            }
+                        }
+                    },
                     "default": {
-                        "description": "successful operation"
+                        "description": "unexpected error"
                     }
                 }
             }
@@ -204,7 +220,7 @@
                 }
             }
         },
-        "/store/store/{storeID}": {
+        "/store/store/{model_id}": {
             "get": {
                 "tags": [
                     "store"
@@ -214,7 +230,7 @@
                 "operationId": "show",
                 "parameters": [
                     {
-                        "name": "storeId",
+                        "name": "model_id",
                         "in": "path",
                         "description": "ID of store that needs to be fetched",
                         "required": true,
@@ -273,6 +289,65 @@
     },
     "components": {
         "schemas": {
+            "ProductRequest": {
+                "title": "ProductRequest",
+                "required": [
+                    "display_name",
+                    "name",
+                    "document",
+                    "price",
+                    "store_id"
+                ],
+                "properties": {
+                    "display_name": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "double"
+                    },
+                    "category_id": {
+                        "type": "integer"
+                    },
+                    "store_id": {
+                        "type": "integer"
+                    },
+                    "document": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "ProductResponse": {
+                "title": "ProductResponse",
+                "description": "Class Store",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "attributes": {
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "display_name": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "StoreRequest": {
                 "title": "StoreRequest",
                 "required": [
