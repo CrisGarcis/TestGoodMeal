@@ -10,7 +10,6 @@ use App\Http\Controllers\Contracts\PlaceableController;
 use App\Models\Store;
 use App\Models\Ubication;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StoreController extends ResourceController implements DocumentableControllerContract, PlaceableControllerContract
 {
@@ -53,13 +52,14 @@ class StoreController extends ResourceController implements DocumentableControll
             'longitude' => 'required',
 
         ]); */
+
         $latitude = '5.0636675'; //$req->latitude;
         $longitude = '-75.4699306'; //$req->latitude;
         $storesOnRange = Store::selectRaw("store.*,(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0) as km")
             ->join('ubication_place', 'ubication_place.placeable_id', '=', 'store.id')
             ->where('ubication_place.placeable_type', $this->model)
             ->whereRaw("(ST_Distance(ubication_place.geom,ST_GeogFromText('SRID=4326;POINT($longitude $latitude)')) / 1000.0)<=?", [300])
-            ->orderBy('km','asc')
+            ->orderBy('km', 'asc')
             ->get();
 
         return $storesOnRange;
@@ -74,7 +74,10 @@ class StoreController extends ResourceController implements DocumentableControll
      *     @OA\RequestBody(
      *         required=true,
      *         description="Store object",
-     *         @OA\JsonContent(ref="#/components/schemas/StoreRequest")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/StoreRequest")
+     *            )
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -92,8 +95,17 @@ class StoreController extends ResourceController implements DocumentableControll
      */
     public function store(Request $rec)
     {
+        $this->validate($rec, [
+            'name' => 'required',
+            'display_name' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'document' => 'required',
+        ]);
         $newStore = parent::store($rec);
-        return  $this->addUbication($newStore->id, $rec);
+        $this->addDocument($newStore->id,$rec);
+        $this->addUbication($newStore->id, $rec);
+        return $newStore;
     }
     /**
      * @OA\Get(

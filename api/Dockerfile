@@ -1,4 +1,6 @@
 FROM php:8.0-apache
+RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+RUN echo 'upload_max_filesize = 40M' >> /usr/local/etc/php/conf.d/docker-php-uploads.ini;
 RUN apt-get update && apt-get -qq -y install curl --no-install-recommends \
     libpq-dev \
     git\
