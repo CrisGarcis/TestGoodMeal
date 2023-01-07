@@ -180,7 +180,7 @@
                     "description": "Store object",
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/StoreRequest"
                             }
@@ -277,7 +277,10 @@
                 "title": "StoreRequest",
                 "required": [
                     "display_name",
-                    "name"
+                    "name",
+                    "document",
+                    "latitude",
+                    "longitude"
                 ],
                 "properties": {
                     "display_name": {
@@ -300,6 +303,10 @@
                     },
                     "address": {
                         "type": "string"
+                    },
+                    "document": {
+                        "type": "string",
+                        "format": "binary"
                     }
                 },
                 "type": "object"
