@@ -2,6 +2,7 @@ import router from "@/router";
 import client from "../../utilitites/axios_client.utilities";
 import { defineStore } from "pinia";
 const STATUS_SUCCESS = 200;
+
 export const useStore = defineStore({
   id: "stores",
   state: () => ({
@@ -25,20 +26,34 @@ export const useStore = defineStore({
         alert(res.data.message);
       }
     },
+    getPositions(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
 
-    async getData() {
-      this.isloading = true;
-      const res = await client().get("store/store");
+      this.getDataStores(latitude, longitude);
+    },
+    errorGetPositions(err) {
+      alert("Error alacceder a tu ubicación");
+      console.log(error);
+    },
+    async getDataStores(latitude, longitude) {
+      const res = await client().get("store/store", {
+        params: { latitude, longitude },
+      });
       if (res.status === STATUS_SUCCESS) {
         this.isloading = false;
 
         this.stores = res.data;
       }
     },
+    async getData() {
+      this.isloading = true;
+      navigator.geolocation.getCurrentPosition(this.getPositions, this.error);
+    },
     async getDataStore(id) {
-      const res = await client().get("store/store/" + id,{
+      const res = await client().get("store/store/" + id, {
         params: {
-          with: ["products"]
+          with: ["products"],
         },
       });
       if (res.status === STATUS_SUCCESS) {

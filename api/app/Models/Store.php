@@ -62,7 +62,7 @@ class Store extends Model
         'address'
     ];
     protected $table = 'store';
-    protected $with=['document'];
+    protected $with=['document','categories'];
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -82,5 +82,13 @@ class Store extends Model
     public function document()
     {
         return $this->morphOne(Document::class, 'documentable');
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 }

@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Store;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Contracts\DocumentableController;
 use App\Http\Controllers\Contracts\DocumentableControllerContract;
-use App\Models\Store\Store;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends ResourceController implements DocumentableControllerContract
 {
     use DocumentableController;
 
-    protected $model = Store::class;
+    protected $model = Product::class;
     /**
      * Create a new controller instance.
      *
@@ -60,26 +60,40 @@ class ProductController extends ResourceController implements DocumentableContro
     {
         return parent::index($req, $withQuery);
     }
-  /**
+ /**
      * @OA\Post(
      *     path="/store/product",
+     *     summary="New Product",
+     *     operationId="product",
      *     tags={"product"},
-     *     summary="Create product",
-     *     description="",
-     *     operationId="store",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Product object",
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/ProductRequest")
+     *            )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="A product",
+     *         @OA\JsonContent(ref="#/components/schemas/ProductResponse"),
+     *     ),
      *     @OA\Response(
      *         response="default",
-     *         description="successful operation"
-     *     ),
-     *     @OA\RequestBody(
-     *         description="Create product object",
-     *         required=true
+     *         description="unexpected error",
+     *         @OA\Schema(ref="#/components/schemas/Error")
      *     )
      * )
+     * @param Request $request
+     * @return object
      */
     public function store(Request $rec)
     {
-        return parent::store($rec);
+        
+        $newProduct = parent::store($rec);
+        $this->addDocument($newProduct->id, $rec);
+        return $newProduct;
     }
     /**
      * @OA\Get(
