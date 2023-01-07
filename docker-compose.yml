@@ -1,7 +1,17 @@
 version: "3.1"
 
 services:
-
+  gui:
+    build: ./gui/services
+    container_name: gui
+    working_dir: /app
+    command: bash -c "npm run dev"
+    volumes:
+      - ./gui:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
   api:
     image: api
     build: ./api
