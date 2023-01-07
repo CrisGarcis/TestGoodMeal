@@ -83,4 +83,8 @@ class Store extends Model
     {
         return $this->morphOne(Document::class, 'documentable');
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class,'product_id');
+    }
 }

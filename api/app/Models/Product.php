@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,7 +21,7 @@ class Product extends Model
         'price',
         'category_id'
     ];
-
+    protected $table = 'product';
     /**
      * The attributes excluded from the model's JSON form.
      *
